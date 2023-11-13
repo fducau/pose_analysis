@@ -84,8 +84,22 @@ def cv2_imshow(img):
     plt.show()
 
 
-def load_image_data(uploaded_file):
-    image_data = uploaded_file.read()
+def load_image_data(uploaded_file, src='streamlit'):
+    """
+    Load image data to process with mediapipe.
+    :param uploaded_file: image object or image path.
+    :src: <str> 'streamlit'|'file'. If coming from streamlit
+          it treates it as an uploaded file, otherwise
+          it opens it from disk.
+    :returns: mediapipe image.
+    """
+    if src not in ['streamlit', 'file']:
+        raise ValueError('Invalid input image')
+
+    if src == 'streamlit':
+        image_data = uploaded_file.read()
+    else:
+        image_data = open(uploaded_file, 'rb').read()
 
     # Convert the bytes to a NumPy array
     np_image = np.frombuffer(image_data, dtype=np.uint8)

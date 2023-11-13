@@ -96,7 +96,7 @@ def main():
 
             st.image(uploaded_file, caption="Original Image", width=150)
 
-            mp_image = load_image_data(uploaded_file)
+            mp_image = load_image_data(uploaded_file, src='streamlit')
 
             pose_detection = pose_estimation(mp_image, cfg)
             annotated_image = draw_landmarks_on_image(
@@ -121,6 +121,7 @@ def main():
 
             else:
                 analysis_landmarks = pose_detection.pose_landmarks[0][23:27]
+                pose_coordinates = get_coordinates(analysis_landmarks)
                 st.success(
                     """
                     Pose successfully found.
@@ -135,7 +136,6 @@ def main():
         # Front analysis
         if analysis == analysis_options[0]:
             if st.button("Estimate Abduction Angle"):
-                pose_coordinates = get_coordinates(analysis_landmarks)
                 analysis_result = estimate_abduction(
                     pose_coordinates,
                     limp_leg
@@ -149,7 +149,6 @@ def main():
 
         elif analysis == analysis_options[1]:
             if st.button("Estimate Flexion Angle"):
-                pose_coordinates = get_coordinates(analysis_landmarks)
                 analysis_result = estimate_flexion(
                     analysis_landmarks,
                     limp_leg
@@ -163,22 +162,33 @@ def main():
         # Post to Horus API
         if st.session_state.computed_angles:
             st.markdown("Analysis JSON")
-            post_data = {
-                "abduction_angle": st.session_state.abduction_angle,
-                "flexion_angle": st.session_state.flexion_angle,
-                "any_data_as_file": {
-                    "annotated_image": "cropped",
-                    "analysis_landmarks": get_coordinates(analysis_landmarks),
-                },
-                "test_number": test_number,
-            }
+            post_data = {"data": {
+                "abduction_angle": str(st.session_state.abduction_angle),
+                "flexion_angle": str(st.session_state.flexion_angle),
+                "test_number": 3247,
+                "any_data_as_file": 'CF3247.png'
+            }}
             st.write(post_data)
 
             if st.button("Post to API"):
                 import json
+                cv2.imwrite(
+                    './result.png',
+                    cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
+                )
 
-                post_data["any_data_as_file"] = annotated_image.tolist()
-                response = requests.post(cfg["post_url"], json=json.dumps(post_data))
+                headers = {
+                    'Content-Type': 'application/json',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8'
+                }
+
+                files = {"data": open('./result.png', 'rb')}
+
+                response = requests.post(
+                    cfg["post_url"],
+                    data=json.dumps(post_data),
+                    headers=headers,
+                )
                 st.write(response)
                 print(response)
 
