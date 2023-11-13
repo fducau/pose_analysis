@@ -5,7 +5,7 @@ Estimate flexion and abduction angles of leg amputees from pictures.
 Based on `mediapipe`
 
 
-# Install
+# Run
   - Clone the repo
   - Create virtual envirnoment `python3 -m venv env`
   - Activate virtual environment `source env/bin/activate`
