@@ -90,9 +90,12 @@ def main():
         )
 
         if uploaded_file is not None:
-            test_number = uploaded_file.name[2:]
-            test_number = test_number.split(".")[0]
-            test_number = int(test_number)
+            try:
+                test_number = uploaded_file.name[2:]
+                test_number = test_number.split(".")[0]
+                test_number = int(test_number)
+            except Exception as e:
+                test_number = uploaded_file.name.split(".")[0]
 
             st.image(uploaded_file, caption="Original Image", width=150)
 
