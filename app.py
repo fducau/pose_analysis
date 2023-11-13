@@ -150,7 +150,7 @@ def main():
         elif analysis == analysis_options[1]:
             if st.button("Estimate Flexion Angle"):
                 analysis_result = estimate_flexion(
-                    analysis_landmarks,
+                    pose_coordinates,
                     limp_leg
                 )
                 st.write(f"{analysis_result:.2f} degrees")
