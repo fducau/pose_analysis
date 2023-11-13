@@ -1,5 +1,7 @@
 # Pose Analysis Demo
 
+[![Python application](https://github.com/fducau/pose_analysis/actions/workflows/python-app.yml/badge.svg)](https://github.com/fducau/pose_analysis/actions/workflows/python-app.yml)
+
 Estimate flexion and abduction angles of leg amputees from pictures.
 
 Based on `mediapipe`
