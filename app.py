@@ -51,6 +51,7 @@ def main():
             - Place two identical chairs in front of the background.
             - Hold both chairs with your hands from the upper part (one on each side of your body)
             - Lift yourself with your arms suficiently so your standing leg is touching the floor but it is not sustaining your body weight.
+            - Your hips should be in a resting state and you should not be tightening any of the muscles of your legs.
         """
         )
         st.image(
@@ -134,7 +135,11 @@ def main():
         # Front analysis
         if analysis == analysis_options[0]:
             if st.button("Estimate Abduction Angle"):
-                analysis_result = estimate_abduction(analysis_landmarks, limp_leg)
+                pose_coordinates = get_coordinates(analysis_landmarks)
+                analysis_result = estimate_abduction(
+                    pose_coordinates,
+                    limp_leg
+                )
                 st.write(f"{analysis_result:.2f} degrees")
                 flexion_angle = None
                 abduction_angle = analysis_result
@@ -144,7 +149,11 @@ def main():
 
         elif analysis == analysis_options[1]:
             if st.button("Estimate Flexion Angle"):
-                analysis_result = estimate_flexion(analysis_landmarks, limp_leg)
+                pose_coordinates = get_coordinates(analysis_landmarks)
+                analysis_result = estimate_flexion(
+                    analysis_landmarks,
+                    limp_leg
+                )
                 st.write(f"{analysis_result:.2f} degrees")
                 flexion_angle = analysis_result
                 st.session_state.computed_angles = True

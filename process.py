@@ -126,7 +126,7 @@ def find_perpendicular_vector(point1, point2):
     return perpendicular_vector
 
 
-def estimate_abduction(pose_landmarks, limp_leg):
+def estimate_abduction(pose_coordinates, limp_leg):
     """
     :param pose_landmarks: <list>
         List of NormalizedLandmark objects.
@@ -136,7 +136,6 @@ def estimate_abduction(pose_landmarks, limp_leg):
     :param limp_leg: <str> 'RIGHT'|'LEFT'
     :returns: <float> abduction angle in degrees.
     """
-    pose_coordinates = get_coordinates(pose_landmarks)
     pose_points = [Point(*pc) for pc in pose_coordinates]
     hip_vector = Line(pose_points[0], pose_points[1])
 
@@ -154,7 +153,9 @@ def estimate_abduction(pose_landmarks, limp_leg):
         vertical_reference = Line(-vertical_reference)
 
     # Compute abduction angle
-    if limp_leg == "LEFT":
+    if vertical_reference.direction == leg_vector.direction:
+        abduction_dgr = 0
+    elif limp_leg == "LEFT":
         abduction_dgr = angle(vertical_reference, leg_vector) * 180 / math.pi
     else:
         abduction_dgr = -angle(vertical_reference, leg_vector) * 180 / math.pi
@@ -162,7 +163,7 @@ def estimate_abduction(pose_landmarks, limp_leg):
     return abduction_dgr
 
 
-def estimate_flexion(pose_landmarks, limp_leg):
+def estimate_flexion(pose_coordinates, limp_leg):
     """
     :param pose_landmarks: <list>
         List of NormalizedLandmark objects.
@@ -172,7 +173,6 @@ def estimate_flexion(pose_landmarks, limp_leg):
     :param limp_leg: <str> 'RIGHT'|'LEFT'
     :returns: <float> flexion angle in degrees.
     """
-    pose_coordinates = get_coordinates(pose_landmarks)
     pose_points = [Point(*pc) for pc in pose_coordinates]
 
     vertical_line = Line(Point(0, 0), Point(0, 1))
@@ -190,8 +190,10 @@ def estimate_flexion(pose_landmarks, limp_leg):
     if vertical_reference.direction[1] < 0:
         vertical_reference = Line(-vertical_reference)
 
-    # Compute abduction angle
-    if limp_leg == "LEFT":
+    # Compute flexoin angle
+    if vertical_reference.direction == leg_vector.direction:
+        flexion_dgr = 0
+    elif limp_leg == "LEFT":
         flexion_dgr = angle(leg_vector, vertical_reference) * 180 / math.pi
     else:
         flexion_dgr = angle(vertical_reference, leg_vector) * 180 / math.pi

@@ -1,3 +1,4 @@
+pytest
 absl-py==2.0.0
 altair==5.1.2
 anyio==4.0.0
