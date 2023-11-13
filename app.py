@@ -40,7 +40,7 @@ def main():
             """
             - Choose a place with solid background and uniform illumination.
             - Use as little clothing as possible when taking the picture.
-            - The picture frame should capture the entire body shape.
+            - The picture frame should capture the entire body shape and head.
         """
         )
     with st.expander("(2) Front picture instructions"):
