@@ -1,5 +1,6 @@
 import mediapipe as mp
 
+import os
 import streamlit as st
 import cv2
 import numpy as np
@@ -20,8 +21,22 @@ from process import (
 
 cfg = {
     "model_path": "./pretrained_models/pose_landmarker_heavy.task",
+    "model_url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/latest/pose_landmarker_heavy.task",
 }
 IMG_HEIGHT = 1000
+
+# Make sure we have the model weights
+if not os.path.exists('./pretrained_models/pose_landmarker_heavy.task'):
+    if not os.path.exists('./pretrained_models'):
+        os.makedirs('./pretrained_models')
+
+    response = requests.get(cfg['model_url'])
+    with open(cfg['model_path'], 'wb') as file:
+        file.write(response.content)
+
+    print(f"File downloaded to {cfg['model_path']}")
+
+
 
 def main():
     st.session_state.loaded_landmarks = False
