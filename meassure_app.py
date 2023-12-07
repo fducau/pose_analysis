@@ -62,7 +62,7 @@ def main():
 
     user_height = st.number_input("Please enter your height in centimeters")
 
-    if user_height is not None:
+    if user_height != 0:
         uploaded_file = st.file_uploader(
             "Please upload your picture according to the instructions",
             type=["jpg", "jpeg", "png"],
