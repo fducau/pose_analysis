@@ -1,4 +1,4 @@
-# Pose Analysis Demo
+# Pose Analysis Demo [archived]
 
 [![Python application](https://github.com/fducau/pose_analysis/actions/workflows/python-app.yml/badge.svg)](https://github.com/fducau/pose_analysis/actions/workflows/python-app.yml)
 
